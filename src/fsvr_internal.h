@@ -1,0 +1,2 @@
+#define FID_NULL UINT64_MAX
+#define FID_MAX UINT64_MAX - 1
