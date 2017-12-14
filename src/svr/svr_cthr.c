@@ -235,9 +235,8 @@ svr_cthr_main()
         if (fdset[WTHR_NUM+1].revents & (POLLIN | POLLERR)) {
             read(ipc_pipe[0], &ipc_msg, sizeof(ipc_msg));
             if (ipc_msg->type != IPC_SEND_MSG) {
-                LOG_ERR("wrong ipc send msg:op %d", ipc_msg->type);
-
-            }else {
+                LOG_ERR("wrong ipc msg:op %d", ipc_msg->type);
+            } else {
                 svr_cthr_send_msg((send_msg_t*) ipc_msg->data);
                 free(ipc_msg);
             }
@@ -257,11 +256,10 @@ svr_cthr_main()
                     svr_cthr_handle_job((svr_job_t*) ipc_msg->data);
                     job = svr_jobq_deq();
                     LOG("job done:%d wthr, job %p, next job %p", i, ipc_msg->data, job);
-                    if (job == NULL) {
+                    if (job == NULL)
                         wthrs[i].is_sleep = true;
-                    } else {
+                    else
                         write(wthrs[i].pfd.wr, &job, sizeof(job));
-                    }
                     break;
                 default:
                     break;
@@ -300,7 +298,6 @@ main()
     /* socket을 열어서 클라이언트 받을 준비 */
     svr_sock_init();
 
-    /**/
     /* worker thread, suspend thread 생성 후 메세지 받음 */
     if (!svr_cthr_init())
         svr_cthr_main();
